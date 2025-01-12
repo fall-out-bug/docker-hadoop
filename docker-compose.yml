@@ -1,8 +1,7 @@
-version: "3"
-
 services:
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    image: hadoop-namenode
+    build: ./namenode
     container_name: namenode
     restart: always
     ports:
@@ -16,7 +15,8 @@ services:
       - ./hadoop.env
 
   datanode:
-    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    image: hadoop-datanode
+    build: ./datanode
     container_name: datanode
     restart: always
     volumes:
@@ -27,7 +27,8 @@ services:
       - ./hadoop.env
   
   resourcemanager:
-    image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
+    image: hadoop-resourcemanager
+    build: ./resourcemanager
     container_name: resourcemanager
     restart: always
     environment:
@@ -36,7 +37,8 @@ services:
       - ./hadoop.env
 
   nodemanager1:
-    image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
+    image: hadoop-nodemanager
+    build: ./nodemanager
     container_name: nodemanager
     restart: always
     environment:
@@ -45,7 +47,8 @@ services:
       - ./hadoop.env
   
   historyserver:
-    image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
+    image: hadoop-historyserver
+    build: ./historyserver
     container_name: historyserver
     restart: always
     environment:
