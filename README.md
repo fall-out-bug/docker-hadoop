@@ -1,8 +1,5 @@
 # Hadoop Docker
 
-## Supported Hadoop Versions
-
-
 ## Quick Start
 
 Для развертывания игрушечного кластера HDFS просто запустите:
