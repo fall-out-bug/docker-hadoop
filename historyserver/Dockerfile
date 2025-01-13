@@ -1,7 +1,5 @@
 FROM hadoop-base
 
-MAINTAINER Ivan Ermilov <ivan.s.ermilov@gmail.com>
-
 HEALTHCHECK CMD curl -f http://localhost:8188/ || exit 1
 
 ENV YARN_CONF_yarn_timeline___service_leveldb___timeline___store_path=/hadoop/yarn/timeline
