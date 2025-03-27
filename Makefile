@@ -8,6 +8,7 @@ build:
 	docker build -t hadoop-nodemanager ./nodemanager
 	docker build -t hadoop-historyserver ./historyserver
 	docker build -t hadoop-submit ./submit
+	docker build -t hadoop-hive ./hive
 
 wordcount:
 	docker build -t hadoop-wordcount ./submit

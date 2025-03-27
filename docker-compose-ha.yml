@@ -1,7 +1,9 @@
 services:
   namenode:
     image: hadoop-namenode
-    build: ./namenode
+    build:
+      context: ./namenode
+      dockerfile: Dockerfile
     container_name: namenode
     restart: always
     ports:
@@ -16,7 +18,9 @@ services:
 
   datanode1:
     image: hadoop-datanode
-    build: ./datanode
+    build:
+      context: ./datanode
+      dockerfile: Dockerfile
     container_name: datanode-1
     restart: always
     volumes:
@@ -28,7 +32,9 @@ services:
     
   datanode2:
     image: hadoop-datanode
-    build: ./datanode
+    build:
+      context: ./datanode
+      dockerfile: Dockerfile
     container_name: datanode-2
     restart: always
     volumes:
@@ -40,7 +46,9 @@ services:
 
   datanode3:
     image: hadoop-datanode
-    build: ./datanode
+    build:
+      context: ./datanode
+      dockerfile: Dockerfile
     container_name: datanode-3
     restart: always
     volumes:
@@ -52,7 +60,9 @@ services:
   
   resourcemanager:
     image: hadoop-resourcemanager
-    build: ./resourcemanager
+    build:
+      context: ./resourcemanager
+      dockerfile: Dockerfile
     container_name: resourcemanager
     restart: always
     ports:
@@ -64,7 +74,9 @@ services:
 
   nodemanager1:
     image: hadoop-nodemanager
-    build: ./nodemanager
+    build:
+      context: ./nodemanager
+      dockerfile: Dockerfile
     container_name: nodemanager-1
     restart: always
     environment:
@@ -74,7 +86,9 @@ services:
 
   nodemanager2:
     image: hadoop-nodemanager
-    build: ./nodemanager
+    build:
+      context: ./nodemanager
+      dockerfile: Dockerfile
     container_name: nodemanager-2
     restart: always
     environment:
@@ -84,7 +98,9 @@ services:
 
   nodemanager3:
     image: hadoop-nodemanager
-    build: ./nodemanager
+    build:
+      context: ./nodemanager
+      dockerfile: Dockerfile
     container_name: nodemanager-3
     restart: always
     environment:
@@ -94,7 +110,9 @@ services:
   
   historyserver:
     image: hadoop-historyserver
-    build: ./historyserver
+    build:
+      context: ./historyserver
+      dockerfile: Dockerfile
     container_name: historyserver
     restart: always
     ports:
@@ -106,26 +124,50 @@ services:
     env_file:
       - ./hadoop.env
 
-  # hive-server:
-  #   image: hive
-  #   env_file:
-  #     - ./hive/hadoop-hive.env
-  #   environment:
-  #     HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
-  #     SERVICE_PRECONDITION: "hive-metastore:9083"
-  #   ports:
-  #     - "10000:10000"
-  # hive-metastore:
-  #   image: hive
-  #   env_file:
-  #     - ./hive/hadoop-hive.env
-  #   command: /opt/hive/bin/hive --service metastore
-  #   environment:
-  #     SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088 hive-metastore-postgresql:5432"
-  #   ports:
-  #     - "9083:9083"
-  # hive-metastore-postgresql:
-  #   image: hive-metastore
+
+  hive:
+    image: hadoop-hive
+    # image: hadoop-base
+    build:
+      context: ./hive
+      # context: ./base
+      dockerfile: Dockerfile
+    container_name: hive-server
+    depends_on:
+      namenode:
+        condition: service_healthy
+      resourcemanager:
+        condition: service_healthy
+      postgres:
+        condition: service_started
+    environment:
+      - HIVE_METASTORE_DB_TYPE=postgres
+      - HIVE_METASTORE_HOST=postgres
+      - HIVE_METASTORE_PORT=5432
+      - HIVE_METASTORE_DB=metastore
+      - HIVE_METASTORE_USER=hiveuser
+      - HIVE_METASTORE_PASSWORD=hivepassword
+    ports:
+      - "10000:10000"  # Hive Thrift Server
+    volumes:
+      - hive-data:/opt/hive/data
+      - hive-logs:/opt/hive/logs
+    env_file:
+      - ./hadoop.env
+
+  postgres:
+    image: postgres:13
+    container_name: hive-postgres
+    environment:
+      POSTGRES_USER: hiveuser
+      POSTGRES_PASSWORD: hivepassword
+      POSTGRES_DB: metastore
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - ./hadoop.env
  
   
 volumes:
@@ -134,3 +176,6 @@ volumes:
   hadoop_datanode-2:
   hadoop_datanode-3:
   hadoop_historyserver:
+  hive-data:
+  hive-logs:
+  postgres-data:

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <property><name>tez.lib.uris</name><value>hdfs://namenode:9000/apps/tez.tar.gz</value></property>
+  <property><name>tez.use.cluster.hadoop-libs</name><value>true</value></property>
+</configuration>

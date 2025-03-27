@@ -45,7 +45,25 @@
 
 
 # Set HADOOP_HOME to point to a specific hadoop install directory
-# HADOOP_HOME=${bin}/../../hadoop
+export HADOOP_HOME=/opt/hadoop
+export HADOOP_CONF_DIR=/etc/hadoop
+export HIVE_HOME=/opt/hive
+export TEZ_HOME=/opt/tez
+export HIVE_INSTALL_DIR=/opt/hive/
+export HIVE_CONF_DIR=$HIVE_HOME/conf
+
+export HADOOP_CLASSPATH=${HADOOP_CONF_DIR}:${HIVE_CONF_DIR}:$HIVE_HOME/lib/*:$TEZ_HOME/lib/*
+
+# export HADOOP_CLASSPATH=${TEZ_HOME}/conf:${TEZ_HOME}/*:${TEZ_HOME}/lib/*
+# export HADOOP_CLASSPATH=$(find $HADOOP_HOME/ -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$(find $HADOOP_HOME/share/hadoop/common -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$(find $HADOOP_HOME/share/hadoop/client -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$(find $HADOOP_HOME/share/hadoop/tools -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$(find $HADOOP_HOME/share/hadoop/yarn -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$(find $HADOOP_HOME/share/hadoop/mapreduce -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$(find $HADOOP_HOME/share/hadoop/hdfs -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$(find $TEZ_HOME/ -name '*.jar' | xargs echo | tr ' ' ':')
+# export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$(find $HIVE_HOME/ -name '*.jar' | xargs echo | tr ' ' ':')
 
 # Hive Configuration Directory can be controlled by:
 # export HIVE_CONF_DIR=
