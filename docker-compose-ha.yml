@@ -16,47 +16,61 @@ services:
     env_file:
       - ./hadoop.env
 
-  datanode1:
+  datanode:
     image: hadoop-datanode
     build:
       context: ./datanode
       dockerfile: Dockerfile
-    container_name: datanode-1
+    container_name: datanode
     restart: always
     volumes:
-      - hadoop_datanode-1:/hadoop/dfs/data
+      - hadoop_datanode:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
     env_file:
       - ./hadoop.env
+  
+  # datanode1:
+  #   image: hadoop-datanode
+  #   build:
+  #     context: ./datanode
+  #     dockerfile: Dockerfile
+  #   container_name: datanode-1
+  #   restart: always
+  #   volumes:
+  #     - hadoop_datanode-1:/hadoop/dfs/data
+  #   environment:
+  #     SERVICE_PRECONDITION: "namenode:9870"
+  #   env_file:
+  #     - ./hadoop.env
     
-  datanode2:
-    image: hadoop-datanode
-    build:
-      context: ./datanode
-      dockerfile: Dockerfile
-    container_name: datanode-2
-    restart: always
-    volumes:
-      - hadoop_datanode-2:/hadoop/dfs/data
-    environment:
-      SERVICE_PRECONDITION: "namenode:9870"
-    env_file:
-      - ./hadoop.env
+  # datanode2:
+  #   image: hadoop-datanode
+  #   build:
+  #     context: ./datanode
+  #     dockerfile: Dockerfile
+  #   container_name: datanode-2
+  #   restart: always
+  #   volumes:
+  #     - hadoop_datanode-2:/hadoop/dfs/data
+  #   environment:
+  #     SERVICE_PRECONDITION: "namenode:9870"
+  #   env_file:
+  #     - ./hadoop.env
 
-  datanode3:
-    image: hadoop-datanode
-    build:
-      context: ./datanode
-      dockerfile: Dockerfile
-    container_name: datanode-3
-    restart: always
-    volumes:
-      - hadoop_datanode-3:/hadoop/dfs/data
-    environment:
-      SERVICE_PRECONDITION: "namenode:9870"
-    env_file:
-      - ./hadoop.env
+  # datanode3:
+  #   image: hadoop-datanode
+  #   build:
+  #     context: ./datanode
+  #     dockerfile: Dockerfile
+  #   container_name: datanode-3
+  #   restart: always
+  #   volumes:
+  #     - hadoop_datanode-3:/hadoop/dfs/data
+  #   environment:
+  #     SERVICE_PRECONDITION: "namenode:9870"
+  #   env_file:
+  #     - ./hadoop.env
   
   resourcemanager:
     image: hadoop-resourcemanager
@@ -68,45 +82,57 @@ services:
     ports:
       - 8088:8088
     environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864"
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864"
     env_file:
       - ./hadoop.env
 
-  nodemanager1:
+  nodemanager:
     image: hadoop-nodemanager
     build:
       context: ./nodemanager
       dockerfile: Dockerfile
-    container_name: nodemanager-1
+    container_name: nodemanager
     restart: always
     environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088"
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     env_file:
       - ./hadoop.env
 
-  nodemanager2:
-    image: hadoop-nodemanager
-    build:
-      context: ./nodemanager
-      dockerfile: Dockerfile
-    container_name: nodemanager-2
-    restart: always
-    environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088"
-    env_file:
-      - ./hadoop.env
+  # nodemanager1:
+  #   image: hadoop-nodemanager
+  #   build:
+  #     context: ./nodemanager
+  #     dockerfile: Dockerfile
+  #   container_name: nodemanager-1
+  #   restart: always
+  #   environment:
+  #     SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088"
+  #   env_file:
+  #     - ./hadoop.env
 
-  nodemanager3:
-    image: hadoop-nodemanager
-    build:
-      context: ./nodemanager
-      dockerfile: Dockerfile
-    container_name: nodemanager-3
-    restart: always
-    environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088"
-    env_file:
-      - ./hadoop.env
+  # nodemanager2:
+  #   image: hadoop-nodemanager
+  #   build:
+  #     context: ./nodemanager
+  #     dockerfile: Dockerfile
+  #   container_name: nodemanager-2
+  #   restart: always
+  #   environment:
+  #     SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088"
+  #   env_file:
+  #     - ./hadoop.env
+
+  # nodemanager3:
+  #   image: hadoop-nodemanager
+  #   build:
+  #     context: ./nodemanager
+  #     dockerfile: Dockerfile
+  #   container_name: nodemanager-3
+  #   restart: always
+  #   environment:
+  #     SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088"
+  #   env_file:
+  #     - ./hadoop.env
   
   historyserver:
     image: hadoop-historyserver
@@ -118,7 +144,7 @@ services:
     ports:
       - 8188:8188
     environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode-1:9864 datanode-2:9864 datanode-3:9864 resourcemanager:8088"
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     volumes:
       - hadoop_historyserver:/hadoop/yarn/timeline
     env_file:
@@ -172,9 +198,10 @@ services:
   
 volumes:
   hadoop_namenode:
-  hadoop_datanode-1:
-  hadoop_datanode-2:
-  hadoop_datanode-3:
+  hadoop_datanode:
+  # hadoop_datanode-1:
+  # hadoop_datanode-2:
+  # hadoop_datanode-3:
   hadoop_historyserver:
   hive-data:
   hive-logs:
